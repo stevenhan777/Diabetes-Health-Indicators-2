@@ -12,8 +12,8 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
 
-# from src.components.data_transformation import DataTransformation
-# from src.components.data_transformation import DataTransformationConfig
+from src.components.data_transformation import DataTransformation
+from src.components.data_transformation import DataTransformationConfig
 
 # from src.components.model_trainer import ModelTrainerConfig
 # from src.components.model_trainer import ModelTrainer
@@ -58,34 +58,13 @@ class DataIngestion:
         except Exception as e:
             raise CustomException(e,sys)
         
-    # def save_train_test(self,train_set,test_set):
-    #     logging.info("Entered the save_train_test")
-    #     try:
-    #         train_set.to_csv(self.ingestion_config.train_data_path,index=False,header=True)
-
-    #         test_set.to_csv(self.ingestion_config.test_data_path,index=False,header=True)
-
-    #         logging.info("test and train data saved to artifacts")
-
-    #         return(
-    #             self.ingestion_config.train_data_path,
-    #             self.ingestion_config.test_data_path
-
-    #         )
-    #     except Exception as e:
-    #         raise CustomException(e,sys)
-        
 if __name__=="__main__":
     obj=DataIngestion()
-    obj.initiate_data_ingestion()
+    train_data,test_data = obj.initiate_data_ingestion()
+    print("train_data:", train_data)
+    print("test_data:", test_data)
+    
+    data_transformation=DataTransformation()
 
-    # data_transformation=DataTransformation()
-    # train_arr,test_arr,train_df,test_df,_=data_transformation.initiate_data_transformation() # train_data,test_data
-
-    # DataIngestion().save_train_test(train_df,test_df)
-
-    # modeltrainer=ModelTrainer()
-    # best_model_name, r2score = modeltrainer.initiate_model_trainer(train_arr,test_arr)
-    # print(f"best model: {best_model_name}")
-    # print(f"R2 Score: {r2score}")
+    data_transformation.initiate_data_transformation(train_data,test_data)
 
