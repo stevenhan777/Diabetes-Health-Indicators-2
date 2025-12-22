@@ -52,7 +52,7 @@ class ModelTrainer:
                     'max_features': ['sqrt', 'log2', None],
                     'class_weight': ['balanced', None]
                 },
-                "Random Forest": {
+                "Random Forest Classifier": {
                     'n_estimators': [50, 100, 200, 300],
                     'max_depth': [5, 10, 15, 20, None],
                     'min_samples_split': [2, 5, 10],
@@ -61,7 +61,7 @@ class ModelTrainer:
                     'class_weight': ['balanced', 'balanced_subsample', None],
                     'bootstrap': [True, False]
                 },
-                "XGBoost": {
+                "XGBClassifier": {
                     'n_estimators': [50, 100, 200, 300],
                     'max_depth': [3, 5, 7, 9],
                     'learning_rate': [0.01, 0.05, 0.1, 0.2],
@@ -71,7 +71,7 @@ class ModelTrainer:
                     'min_child_weight': [1, 3, 5],
                     'scale_pos_weight': [1, 2, 3]                   
                 },
-                "CatBoost": {
+                "CatBoosting Classifier": {
                     'iterations': [50, 100, 200, 300],
                     'depth': [4, 6, 8, 10],
                     'learning_rate': [0.01, 0.05, 0.1, 0.2],
@@ -79,12 +79,12 @@ class ModelTrainer:
                     'border_count': [32, 64, 128],
                     'class_weights': [[1, 1], [1, 2], [1, 3]]                  
                 },
-                "AdaBoost": {
+                "AdaBoost Classifier": {
                     'n_estimators': [50, 100, 200, 300],
                     'learning_rate': [0.01, 0.05, 0.1, 0.5, 1.0],
                     'algorithm': ['SAMME', 'SAMME.R']
                 },
-                "GradientBoosting": {
+                "GradientBoosting Classifier": {
                     'n_estimators': [50, 100, 200, 300],
                     'max_depth': [3, 5, 7, 9],
                     'learning_rate': [0.01, 0.05, 0.1, 0.2],
@@ -97,7 +97,7 @@ class ModelTrainer:
             }
 
             model_report = evaluate_models(X_train=X_train,y_train=y_train,X_test=X_test,y_test=y_test,
-                                            models=models,param=params)
+                                            models=models,params=params)
 
             # Find the best overall model
             print(f"\n\n{'='*60}")
