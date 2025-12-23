@@ -47,9 +47,20 @@ def predict_datapoint():
 
         predict_pipeline=PredictPipeline()
         print("Mid Prediction")
-        results=predict_pipeline.predict(pred_df)
+        results, probabilities =predict_pipeline.predict(pred_df)
         print("after Prediction")
-        return render_template('home.html',results=results[0])
+        result_mapping = {
+            0: "No Diabetes",
+            1: "Diabetes"
+        }
+
+        result_text = result_mapping.get(results[0], "Unknown")
+        predicted_probability = probabilities[0][int(results[0])] * 100
+
+        result_with_probability = f"{result_text} (Prediction confidence: {predicted_probability:.2f}%)"
+
+        return render_template('home.html', results=result_with_probability)
+
     
 
 if __name__=="__main__":

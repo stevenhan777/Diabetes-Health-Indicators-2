@@ -20,7 +20,8 @@ class PredictPipeline:
             #data_scaled=preprocessor.transform(features)
             data_scaled= features
             preds=model.predict(data_scaled)
-            return preds
+            probabilities = model.predict_proba(data_scaled)
+            return preds, probabilities
         
         except Exception as e:
             raise CustomException(e,sys)
