@@ -1,3 +1,4 @@
+--no-binary :all: xgboost
 blinker==1.9.0
 catboost==1.2.8
 click==8.3.1
