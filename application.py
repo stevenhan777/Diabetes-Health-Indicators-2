@@ -7,7 +7,12 @@ import pandas as pd
 #import dill
 import pickle
 
+# Get the base directory
+# BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+# # Use absolute paths for model files
+# #model_path = 
+# os.path.join(BASE_DIR, 'src', 'pipeline', 'predict_pipeline')
 #from sklearn.preprocessing import StandardScaler
 from src.pipeline.predict_pipeline import CustomData,PredictPipeline
 
