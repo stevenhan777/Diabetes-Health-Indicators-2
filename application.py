@@ -65,7 +65,29 @@ def predict_datapoint():
 
         result_with_probability = f"{result_text} (Prediction confidence: {predicted_probability:.2f}%)"
 
-        return render_template('home.html', results=result_with_probability)
+        # Pass form values back to template to preserve them
+        form_values = {
+            'HighBP': request.form.get('HighBP'),
+            'HighChol': request.form.get('HighChol'),
+            'CholCheck': request.form.get('CholCheck'),
+            'BMI': request.form.get('BMI'),
+            'Smoker': request.form.get('Smoker'),
+            'HeartDiseaseorAttack': request.form.get('HeartDiseaseorAttack'),
+            'PhysActivity': request.form.get('PhysActivity'),
+            'Fruits': request.form.get('Fruits'),
+            'Veggies': request.form.get('Veggies'),
+            'HvyAlcoholConsump': request.form.get('HvyAlcoholConsump'),
+            'GenHlth': request.form.get('GenHlth'),
+            'MentHlth': request.form.get('MentHlth'),
+            'PhysHlth': request.form.get('PhysHlth'),
+            'DiffWalk': request.form.get('DiffWalk'),
+            'Sex': request.form.get('Sex'),
+            'Age': request.form.get('Age'),
+            'Education': request.form.get('Education'),
+            'Income': request.form.get('Income')
+        }
+
+        return render_template('home.html', results=result_with_probability, form_values=form_values)
 
 if __name__=="__main__":
     application.run(host="0.0.0.0")       

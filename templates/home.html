@@ -8,177 +8,179 @@
             <legend>Diabetes Indicators Classification Prediction</legend>
         </h1>
 
+        <input type="button" class="btn btn-primary" value="Auto-populate with Random Values" onclick="autoPopulate()" />
+
         <div class="mb-3">
             <label class="form-label">High Blood Pressure</label>
-            <select class="form-control" name="HighBP" required>
-                <option class="placeholder" selected disabled value="">Select Option</option>
-                <option value="0">No</option>
-                <option value="1">Yes</option>
+            <select class="form-control" name="HighBP" id="HighBP" required>
+                <option class="placeholder" disabled value="">Select Option</option>
+                <option value="0" {% if form_values and form_values.HighBP == '0' %}selected{% endif %}>No</option>
+                <option value="1" {% if form_values and form_values.HighBP == '1' %}selected{% endif %}>Yes</option>
             </select>
         </div>
 
         <div class="mb-3">
             <label class="form-label">High Cholesterol</label>
-            <select class="form-control" name="HighChol" required>
-                <option class="placeholder" selected disabled value="">Select Option</option>
-                <option value="0">No</option>
-                <option value="1">Yes</option>
+            <select class="form-control" name="HighChol" id="HighChol" required>
+                <option class="placeholder" disabled value="">Select Option</option>
+                <option value="0" {% if form_values and form_values.HighChol == '0' %}selected{% endif %}>No</option>
+                <option value="1" {% if form_values and form_values.HighChol == '1' %}selected{% endif %}>Yes</option>
             </select>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Cholesterol Check (in past 5 years)</label>
-            <select class="form-control" name="CholCheck" required>
-                <option class="placeholder" selected disabled value="">Select Option</option>
-                <option value="0">No</option>
-                <option value="1">Yes</option>
+            <select class="form-control" name="CholCheck" id="CholCheck" required>
+                <option class="placeholder" disabled value="">Select Option</option>
+                <option value="0" {% if form_values and form_values.CholCheck == '0' %}selected{% endif %}>No</option>
+                <option value="1" {% if form_values and form_values.CholCheck == '1' %}selected{% endif %}>Yes</option>
             </select>
         </div>
 
         <div class="mb-3">
             <label class="form-label">BMI (Body Mass Index)</label>
-            <input class="form-control" type="number" name="BMI" placeholder="Enter your BMI" min="10" max="100" step="0.1" required />
+            <input class="form-control" type="number" name="BMI" id="BMI" placeholder="Enter your BMI" min="10" max="100" step="0.1" value="{% if form_values %}{{ form_values.BMI }}{% endif %}" required />
         </div>
 
         <div class="mb-3">
             <label class="form-label">Smoker (smoked 100+ cigarettes in lifetime)</label>
-            <select class="form-control" name="Smoker" required>
-                <option class="placeholder" selected disabled value="">Select Option</option>
-                <option value="0">No</option>
-                <option value="1">Yes</option>
+            <select class="form-control" name="Smoker" id="Smoker" required>
+                <option class="placeholder" disabled value="">Select Option</option>
+                <option value="0" {% if form_values and form_values.Smoker == '0' %}selected{% endif %}>No</option>
+                <option value="1" {% if form_values and form_values.Smoker == '1' %}selected{% endif %}>Yes</option>
             </select>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Heart Disease or Heart Attack</label>
-            <select class="form-control" name="HeartDiseaseorAttack" required>
-                <option class="placeholder" selected disabled value="">Select Option</option>
-                <option value="0">No</option>
-                <option value="1">Yes</option>
+            <select class="form-control" name="HeartDiseaseorAttack" id="HeartDiseaseorAttack" required>
+                <option class="placeholder" disabled value="">Select Option</option>
+                <option value="0" {% if form_values and form_values.HeartDiseaseorAttack == '0' %}selected{% endif %}>No</option>
+                <option value="1" {% if form_values and form_values.HeartDiseaseorAttack == '1' %}selected{% endif %}>Yes</option>
             </select>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Physical Activity (in past 30 days, not including job)</label>
-            <select class="form-control" name="PhysActivity" required>
-                <option class="placeholder" selected disabled value="">Select Option</option>
-                <option value="0">No</option>
-                <option value="1">Yes</option>
+            <select class="form-control" name="PhysActivity" id="PhysActivity" required>
+                <option class="placeholder" disabled value="">Select Option</option>
+                <option value="0" {% if form_values and form_values.PhysActivity == '0' %}selected{% endif %}>No</option>
+                <option value="1" {% if form_values and form_values.PhysActivity == '1' %}selected{% endif %}>Yes</option>
             </select>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Fruits (consume 1+ times per day)</label>
-            <select class="form-control" name="Fruits" required>
-                <option class="placeholder" selected disabled value="">Select Option</option>
-                <option value="0">No</option>
-                <option value="1">Yes</option>
+            <select class="form-control" name="Fruits" id="Fruits" required>
+                <option class="placeholder" disabled value="">Select Option</option>
+                <option value="0" {% if form_values and form_values.Fruits == '0' %}selected{% endif %}>No</option>
+                <option value="1" {% if form_values and form_values.Fruits == '1' %}selected{% endif %}>Yes</option>
             </select>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Vegetables (consume 1+ times per day)</label>
-            <select class="form-control" name="Veggies" required>
-                <option class="placeholder" selected disabled value="">Select Option</option>
-                <option value="0">No</option>
-                <option value="1">Yes</option>
+            <select class="form-control" name="Veggies" id="Veggies" required>
+                <option class="placeholder" disabled value="">Select Option</option>
+                <option value="0" {% if form_values and form_values.Veggies == '0' %}selected{% endif %}>No</option>
+                <option value="1" {% if form_values and form_values.Veggies == '1' %}selected{% endif %}>Yes</option>
             </select>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Heavy Alcohol Consumption</label>
-            <select class="form-control" name="HvyAlcoholConsump" required>
-                <option class="placeholder" selected disabled value="">Select Option</option>
-                <option value="0">No (men ≤14 drinks/week, women ≤7 drinks/week)</option>
-                <option value="1">Yes (men >14 drinks/week, women >7 drinks/week)</option>
+            <select class="form-control" name="HvyAlcoholConsump" id="HvyAlcoholConsump" required>
+                <option class="placeholder" disabled value="">Select Option</option>
+                <option value="0" {% if form_values and form_values.HvyAlcoholConsump == '0' %}selected{% endif %}>No (men ≤14 drinks/week, women ≤7 drinks/week)</option>
+                <option value="1" {% if form_values and form_values.HvyAlcoholConsump == '1' %}selected{% endif %}>Yes (men >14 drinks/week, women >7 drinks/week)</option>
             </select>
         </div>
 
         <div class="mb-3">
             <label class="form-label">General Health</label>
-            <select class="form-control" name="GenHlth" required>
-                <option class="placeholder" selected disabled value="">Select Health Level</option>
-                <option value="1">Excellent</option>
-                <option value="2">Very Good</option>
-                <option value="3">Good</option>
-                <option value="4">Fair</option>
-                <option value="5">Poor</option>
+            <select class="form-control" name="GenHlth" id="GenHlth" required>
+                <option class="placeholder" disabled value="">Select Health Level</option>
+                <option value="1" {% if form_values and form_values.GenHlth == '1' %}selected{% endif %}>Excellent</option>
+                <option value="2" {% if form_values and form_values.GenHlth == '2' %}selected{% endif %}>Very Good</option>
+                <option value="3" {% if form_values and form_values.GenHlth == '3' %}selected{% endif %}>Good</option>
+                <option value="4" {% if form_values and form_values.GenHlth == '4' %}selected{% endif %}>Fair</option>
+                <option value="5" {% if form_values and form_values.GenHlth == '5' %}selected{% endif %}>Poor</option>
             </select>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Mental Health (days not good in past 30 days)</label>
-            <input class="form-control" type="number" name="MentHlth" placeholder="Enter days (0-30)" min="0" max="30" required />
+            <input class="form-control" type="number" name="MentHlth" id="MentHlth" placeholder="Enter days (0-30)" min="0" max="30" value="{% if form_values %}{{ form_values.MentHlth }}{% endif %}" required />
         </div>
 
         <div class="mb-3">
             <label class="form-label">Physical Health (days not good in past 30 days)</label>
-            <input class="form-control" type="number" name="PhysHlth" placeholder="Enter days (0-30)" min="0" max="30" required />
+            <input class="form-control" type="number" name="PhysHlth" id="PhysHlth" placeholder="Enter days (0-30)" min="0" max="30" value="{% if form_values %}{{ form_values.PhysHlth }}{% endif %}" required />
         </div>
 
         <div class="mb-3">
             <label class="form-label">Difficulty Walking or Climbing Stairs</label>
-            <select class="form-control" name="DiffWalk" required>
-                <option class="placeholder" selected disabled value="">Select Option</option>
-                <option value="0">No</option>
-                <option value="1">Yes</option>
+            <select class="form-control" name="DiffWalk" id="DiffWalk" required>
+                <option class="placeholder" disabled value="">Select Option</option>
+                <option value="0" {% if form_values and form_values.DiffWalk == '0' %}selected{% endif %}>No</option>
+                <option value="1" {% if form_values and form_values.DiffWalk == '1' %}selected{% endif %}>Yes</option>
             </select>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Sex</label>
-            <select class="form-control" name="Sex" required>
-                <option class="placeholder" selected disabled value="">Select Sex</option>
-                <option value="0">Female</option>
-                <option value="1">Male</option>
+            <select class="form-control" name="Sex" id="Sex" required>
+                <option class="placeholder" disabled value="">Select Sex</option>
+                <option value="0" {% if form_values and form_values.Sex == '0' %}selected{% endif %}>Female</option>
+                <option value="1" {% if form_values and form_values.Sex == '1' %}selected{% endif %}>Male</option>
             </select>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Age Category</label>
-            <select class="form-control" name="Age" required>
-                <option class="placeholder" selected disabled value="">Select Age Range</option>
-                <option value="1">18-24</option>
-                <option value="2">25-29</option>
-                <option value="3">30-34</option>
-                <option value="4">35-39</option>
-                <option value="5">40-44</option>
-                <option value="6">45-49</option>
-                <option value="7">50-54</option>
-                <option value="8">55-59</option>
-                <option value="9">60-64</option>
-                <option value="10">65-69</option>
-                <option value="11">70-74</option>
-                <option value="12">75-79</option>
-                <option value="13">80 or older</option>
+            <select class="form-control" name="Age" id="Age" required>
+                <option class="placeholder" disabled value="">Select Age Range</option>
+                <option value="1" {% if form_values and form_values.Age == '1' %}selected{% endif %}>18-24</option>
+                <option value="2" {% if form_values and form_values.Age == '2' %}selected{% endif %}>25-29</option>
+                <option value="3" {% if form_values and form_values.Age == '3' %}selected{% endif %}>30-34</option>
+                <option value="4" {% if form_values and form_values.Age == '4' %}selected{% endif %}>35-39</option>
+                <option value="5" {% if form_values and form_values.Age == '5' %}selected{% endif %}>40-44</option>
+                <option value="6" {% if form_values and form_values.Age == '6' %}selected{% endif %}>45-49</option>
+                <option value="7" {% if form_values and form_values.Age == '7' %}selected{% endif %}>50-54</option>
+                <option value="8" {% if form_values and form_values.Age == '8' %}selected{% endif %}>55-59</option>
+                <option value="9" {% if form_values and form_values.Age == '9' %}selected{% endif %}>60-64</option>
+                <option value="10" {% if form_values and form_values.Age == '10' %}selected{% endif %}>65-69</option>
+                <option value="11" {% if form_values and form_values.Age == '11' %}selected{% endif %}>70-74</option>
+                <option value="12" {% if form_values and form_values.Age == '12' %}selected{% endif %}>75-79</option>
+                <option value="13" {% if form_values and form_values.Age == '13' %}selected{% endif %}>80 or older</option>
             </select>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Education Level</label>
-            <select class="form-control" name="Education" required>
-                <option class="placeholder" selected disabled value="">Select Education Level</option>
-                <option value="1">Never attended school or only kindergarten</option>
-                <option value="2">Grades 1 through 8 (Elementary)</option>
-                <option value="3">Grades 9 through 11 (Some high school)</option>
-                <option value="4">Grade 12 or GED (High school graduate)</option>
-                <option value="5">College 1 year to 3 years (Some college or technical school)</option>
-                <option value="6">College 4 years or more (College graduate)</option>
+            <select class="form-control" name="Education" id="Education" required>
+                <option class="placeholder" disabled value="">Select Education Level</option>
+                <option value="1" {% if form_values and form_values.Education == '1' %}selected{% endif %}>Never attended school or only kindergarten</option>
+                <option value="2" {% if form_values and form_values.Education == '2' %}selected{% endif %}>Grades 1 through 8 (Elementary)</option>
+                <option value="3" {% if form_values and form_values.Education == '3' %}selected{% endif %}>Grades 9 through 11 (Some high school)</option>
+                <option value="4" {% if form_values and form_values.Education == '4' %}selected{% endif %}>Grade 12 or GED (High school graduate)</option>
+                <option value="5" {% if form_values and form_values.Education == '5' %}selected{% endif %}>College 1 year to 3 years (Some college or technical school)</option>
+                <option value="6" {% if form_values and form_values.Education == '6' %}selected{% endif %}>College 4 years or more (College graduate)</option>
             </select>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Income Level</label>
-            <select class="form-control" name="Income" required>
-                <option class="placeholder" selected disabled value="">Select Income Range</option>
-                <option value="1">Less than $10,000</option>
-                <option value="2">Less than $15,000</option>
-                <option value="3">Less than $20,000</option>
-                <option value="4">Less than $25,000</option>
-                <option value="5">Less than $35,000</option>
-                <option value="6">Less than $50,000</option>
-                <option value="7">Less than $75,000</option>
-                <option value="8">$75,000 or more</option>
+            <select class="form-control" name="Income" id="Income" required>
+                <option class="placeholder" disabled value="">Select Income Range</option>
+                <option value="1" {% if form_values and form_values.Income == '1' %}selected{% endif %}>Less than $10,000</option>
+                <option value="2" {% if form_values and form_values.Income == '2' %}selected{% endif %}>Less than $15,000</option>
+                <option value="3" {% if form_values and form_values.Income == '3' %}selected{% endif %}>Less than $20,000</option>
+                <option value="4" {% if form_values and form_values.Income == '4' %}selected{% endif %}>Less than $25,000</option>
+                <option value="5" {% if form_values and form_values.Income == '5' %}selected{% endif %}>Less than $35,000</option>
+                <option value="6" {% if form_values and form_values.Income == '6' %}selected{% endif %}>Less than $50,000</option>
+                <option value="7" {% if form_values and form_values.Income == '7' %}selected{% endif %}>Less than $75,000</option>
+                <option value="8" {% if form_values and form_values.Income == '8' %}selected{% endif %}>$75,000 or more</option>
             </select>
         </div>
 
@@ -187,8 +189,84 @@
         </div>
     </form>
     <h2>
-       The prediction is: {{results}}
+       {% if results %}The prediction is: {{results}}{% endif %}
     </h2>
    </div>
+
+   <script>
+   function autoPopulate() {
+       console.log('Auto-populate function called');
+       
+       try {
+           // Binary fields (0 or 1)
+           var binaryFields = ['HighBP', 'HighChol', 'CholCheck', 'Smoker', 'HeartDiseaseorAttack', 
+                               'PhysActivity', 'Fruits', 'Veggies', 'HvyAlcoholConsump', 'DiffWalk', 'Sex'];
+           
+           binaryFields.forEach(function(fieldId) {
+               var element = document.getElementById(fieldId);
+               if (element) {
+                   element.value = Math.round(Math.random()).toString();
+                   console.log(fieldId + ' set to: ' + element.value);
+               } else {
+                   console.error('Element not found: ' + fieldId);
+               }
+           });
+           
+           // BMI (10-100)
+           var bmiElement = document.getElementById('BMI');
+           if (bmiElement) {
+               bmiElement.value = (Math.random() * 90 + 10).toFixed(1);
+               console.log('BMI set to: ' + bmiElement.value);
+           }
+           
+           // General Health (1-5)
+           var genHlthElement = document.getElementById('GenHlth');
+           if (genHlthElement) {
+               genHlthElement.value = (Math.floor(Math.random() * 5) + 1).toString();
+               console.log('GenHlth set to: ' + genHlthElement.value);
+           }
+           
+           // Mental Health days (0-30)
+           var mentHlthElement = document.getElementById('MentHlth');
+           if (mentHlthElement) {
+               mentHlthElement.value = Math.floor(Math.random() * 31).toString();
+               console.log('MentHlth set to: ' + mentHlthElement.value);
+           }
+           
+           // Physical Health days (0-30)
+           var physHlthElement = document.getElementById('PhysHlth');
+           if (physHlthElement) {
+               physHlthElement.value = Math.floor(Math.random() * 31).toString();
+               console.log('PhysHlth set to: ' + physHlthElement.value);
+           }
+           
+           // Age (1-13)
+           var ageElement = document.getElementById('Age');
+           if (ageElement) {
+               ageElement.value = (Math.floor(Math.random() * 13) + 1).toString();
+               console.log('Age set to: ' + ageElement.value);
+           }
+           
+           // Education (1-6)
+           var educationElement = document.getElementById('Education');
+           if (educationElement) {
+               educationElement.value = (Math.floor(Math.random() * 6) + 1).toString();
+               console.log('Education set to: ' + educationElement.value);
+           }
+           
+           // Income (1-8)
+           var incomeElement = document.getElementById('Income');
+           if (incomeElement) {
+               incomeElement.value = (Math.floor(Math.random() * 8) + 1).toString();
+               console.log('Income set to: ' + incomeElement.value);
+           }
+           
+           console.log('Auto-populate completed successfully');
+       } catch (error) {
+           console.error('Error in autoPopulate:', error);
+       }
+   }
+   </script>
+
  </body>
 </html>
