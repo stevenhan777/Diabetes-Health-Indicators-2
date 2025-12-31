@@ -72,9 +72,22 @@ def evaluate_models(X_train, y_train,X_test,y_test,models,params):
     
 def load_object(file_path):
     try:
+        print(f"[load_object] Attempting to load: {file_path}")
+        print(f"[load_object] File exists: {os.path.exists(file_path)}")
+        print(f"[load_object] File size: {os.path.getsize(file_path) if os.path.exists(file_path) else 'N/A'} bytes")
+
         with open(file_path, "rb") as file_obj:
-            return pickle.load(file_obj)
+            print(f"[load_object] File opened successfully, loading with pickle...")
+            obj = pickle.load(file_obj)
+            print(f"[load_object] Object loaded successfully, type: {type(obj)}")
+            return obj
 
     except Exception as e:
+        print(f"[load_object] ERROR loading {file_path}")
+        print(f"[load_object] Error type: {type(e).__name__}")
+        print(f"[load_object] Error message: {str(e)}")
+        import traceback
+        print(f"[load_object] Traceback:")
+        traceback.print_exc()
         raise CustomException(e, sys)
     
