@@ -55,9 +55,8 @@ def predict_datapoint():
         }
 
         result_text = result_mapping.get(results[0], "Unknown")
-        predicted_probability = probabilities[0][int(results[0])] * 100
 
-        result_with_probability = f"{result_text} (Prediction confidence: {predicted_probability:.2f}%)"
+        result_with_probability = f"{result_text}"
 
         # Pass form values back to template to preserve them
         form_values = {
