@@ -19,21 +19,6 @@ class PredictPipeline:
 
             model_path=os.path.join(project_root,"artifacts","model.pkl")
             preprocessor_path=os.path.join(project_root,'artifacts','preprocessor.pkl')
-            
-            print(f"Current directory: {current_dir}")
-            print(f"Project root: {project_root}")
-            print(f"Loading model from: {model_path}")
-            print(f"Model file exists: {os.path.exists(model_path)}")
-            print(f"Loading preprocessor from: {preprocessor_path}")
-            print(f"Preprocessor file exists: {os.path.exists(preprocessor_path)}")
-            
-            # List contents of artifacts directory
-            artifacts_dir = os.path.join(project_root, "artifacts")
-            if os.path.exists(artifacts_dir):
-                print(f"Contents of artifacts directory: {os.listdir(artifacts_dir)}")
-            else:
-                print(f"Artifacts directory does not exist at: {artifacts_dir}")
-
 
             print("Before Loading")
 
@@ -42,7 +27,6 @@ class PredictPipeline:
             print("Preprocessor loaded successfully")
             
             print("After Loading")
-            #data_scaled=preprocessor.transform(features)
             data_scaled= features
             preds=model.predict(data_scaled)
             probabilities = model.predict_proba(data_scaled)
