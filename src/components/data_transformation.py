@@ -5,11 +5,8 @@ from dataclasses import dataclass
 import numpy as np 
 import pandas as pd
 from sklearn.compose import ColumnTransformer
-#from sklearn.impute import SimpleImputer
 from imblearn.pipeline import Pipeline  # Use imblearn's Pipeline
-#from sklearn.preprocessing import OneHotEncoder,MinMaxScaler, LabelEncoder
 from sklearn.model_selection import train_test_split
-#from sklearn.feature_selection import VarianceThreshold, mutual_info_regression
 from imblearn.over_sampling import SMOTE
 from imblearn.under_sampling import RandomUnderSampler
 
@@ -27,10 +24,6 @@ class DataTransformation:
         self.data_transformation_config=DataTransformationConfig()
 
     def get_data_transformer_object(self):
-        '''
-        This function is responsible for data transformation
-        
-        '''
         try:         
             
             drop_cols = ColumnTransformer(
