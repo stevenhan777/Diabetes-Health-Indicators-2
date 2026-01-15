@@ -10,8 +10,8 @@
 * Model Training
 * Feature selection
 * Hyperparameter Tuning
-* Best model
-* Flask web app
+* Best model selection
+* Create Flask web application
 * AWS Deployment
 
 #### 1) Problem Statement
@@ -33,7 +33,7 @@ Data cleaning, exploratory data analysis and feature engineering is performed. H
 
 #### 4) Model Training Notebook
 
-The models are fitted on the 4 datasets and determined that the unscaled and balanced dataset has the best overall results and ROC AUC score. All the ensemble boosting models, i.e. XGBoost, AdaBoost, GradientBoost, CatBoost perform the best with CatBoost with the best ROC AUC score. 
+The models are fitted on the 4 datasets and determined that the unscaled and balanced dataset has the best overall results and ROC AUC score. All the ensemble boosting models, i.e. XGBoost, AdaBoost, GradientBoost, CatBoost perform the best, with the CatBoost model having the best ROC AUC score. 
 
 #### 5) Feature Selection Notebook
 
@@ -41,21 +41,20 @@ Perform feature selection using the Gradient Boosting model and the unscaled and
 
 #### 6) Hyperparameter Tuning Notebook
 
-Here, I perform hyperparameter tuning on the most promising models: Decision Tree, Random Forest, XGBoost, CatBoost, AdaBoost, GradientBoost. Final result is the CatBoost model after hyperparameter tuning has the best ROC AUC and PR AUC score. 
-
+Perform hyperparameter tuning on the most promising models: Decision Tree, Random Forest, XGBoost, CatBoost, AdaBoost, and GradientBoost. Final result is the CatBoost model after hyperparameter tuning has the best ROC AUC and PR AUC score. 
 
 #### 7) Modular implementation
 
-I then implemented my process in a modular way within the components folder with a data_ingestion, data_transformation and model_trainer steps. I transform the input data in a pipeline and perform hyperparameter tuning for best result. 
+I then implemented my process in a modular way within the components folder with a data_ingestion, data_transformation and model_trainer steps. I transform the input data in a pipeline and perform hyperparameter tuning to obtain best model. 
 
 #### 8) Flask web app implementation
 
-I then create a predict_pipeline, application and home.html file to create a simple web application for the user to input the fields and get a prediction of Diabetes or No Diabetes using the best model pickle file. 
+I then create a predict_pipeline, application and home.html file to create a simple flask web application for the user to input the health indicator fields and get a prediction of Diabetes or No Diabetes using the best model pickle file. I implemented random autofill of the input fields for ease of use. 
 
 #### 9) Deployment on AWS
 
-I then use AWS Elastic Beanstalk and CodePipeline to deploy the Flask web app. The user can successfully predict Diabetes Classification using the best model. Deployment Link: http://diabetesindicatorsclassifier-env.eba-cp4ukfpd.us-east-1.elasticbeanstalk.com/predictdata
+I then use AWS Elastic Beanstalk and CodePipeline to deploy the web application to AWS. The user can successfully predict Diabetes Classification using the best model. Deployment Link: http://diabetesindicatorsclassifier-env.eba-cp4ukfpd.us-east-1.elasticbeanstalk.com/predictdata
 
 #### Conclusion:
 
-This project successfully developed and deployed a machine learning model for diabetes prediction, addressing the challenges of working with imbalanced healthcare data. Through exploratory data analysis, I identified key predictive features and their relationships with diabetes outcomes. Given the clinical implications where both false positives and false negatives carry significant consequences, I prioritized evaluation metrics beyond simply accuracy and took into account precision, recall, and F1-score to ensure model reliability. Succesful deployment necessitated consistent versioning and an intuitive user experience. This project demonstrates a practical framework for healthcare prediction tasks that can contribute to early detection and improved patient outcomes.
+This project successfully developed and deployed a machine learning model for diabetes prediction, addressing the challenges of working with imbalanced healthcare data. Through exploratory data analysis, I identified key predictive features and their relationships with diabetes outcomes. Given the clinical implications where both false positives and false negatives carry significant consequences, I prioritized evaluation metrics beyond simply accuracy and took into account precision, recall, and F1-score to ensure model reliability. Succesful deployment necessitated consistent versioning and a simple and intuitive user experience. This project demonstrates a practical framework for healthcare prediction tasks that can contribute to early detection and improved patient outcomes.
