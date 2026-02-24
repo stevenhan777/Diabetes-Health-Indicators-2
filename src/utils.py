@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 #import dill
 import pickle
-from sklearn.metrics import roc_auc_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, average_precision_score
 from sklearn.model_selection import RandomizedSearchCV
 
 from src.exception import CustomException
@@ -36,7 +36,7 @@ def evaluate_models(X_train, y_train,X_test,y_test,models,params):
                 para,
                 n_iter=50,
                 cv=5,
-                scoring='roc_auc',
+                scoring='f1',
                 random_state=42,
                 n_jobs=-1,
                 verbose=0
@@ -46,21 +46,20 @@ def evaluate_models(X_train, y_train,X_test,y_test,models,params):
 
             best_model = rs.best_estimator_
 
-            # Calculate ROC-AUC score
-            y_pred_proba = best_model.predict_proba(X_test)[:, 1]
+            y_test_pred = best_model.predict(X_test)
 
-            test_roc_auc = roc_auc_score(y_test, y_pred_proba)
+            test_f1 = f1_score(y_test , y_test_pred, zero_division = 0)
 
             # Store results
             report[model_name] = {
-                'test_roc_auc': test_roc_auc,
+                'test_f1': test_f1,
                 'best_params': rs.best_params_,
                 'best_model': best_model
             }
 
             # Print results for this model
             print(f"\n{model_name} Results:")
-            print(f"ROC-AUC Score: {test_roc_auc:.4f}")
+            print(f"F1 Score: {test_f1:.4f}")
             print(f"Best Hyperparameters:")
             for param_name, param_value in rs.best_params_.items():
                 print(f" - {param_name}: {param_value}")

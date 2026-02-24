@@ -5,6 +5,7 @@ from dataclasses import dataclass
 import numpy as np 
 import pandas as pd
 from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import MinMaxScaler
 from imblearn.pipeline import Pipeline  # Use imblearn's Pipeline
 from sklearn.model_selection import train_test_split
 from imblearn.over_sampling import SMOTE
@@ -28,7 +29,7 @@ class DataTransformation:
             
             drop_cols = ColumnTransformer(
                 [
-                    ('drop_cols', 'drop', ['NoDocbcCost', 'Stroke', 'AnyHealthcare']) # Explicitly drop these features
+                    ('drop_cols', 'drop', ['NoDocbcCost', 'Stroke', 'AnyHealthcare', 'Sex', 'DiffWalk', 'Smoker', 'Veggies', 'Fruits', 'PhysActivity']) # Explicitly drop these features
                 ],
                 remainder='passthrough'
             )
@@ -37,21 +38,30 @@ class DataTransformation:
             preprocessor = Pipeline(
                 steps = [
                     ('drop_cols', drop_cols),
+                    ('scaler', MinMaxScaler()),  # Scale on raw training data before resampling
                     ('smote', SMOTE(sampling_strategy={1: 100000}, random_state=42)),
                     ('randomundersampler', RandomUnderSampler(sampling_strategy={0: 100000}, random_state=42))
                 ]
             )
-            logging.info("Pipeline created with column dropping, SMOTE, and RandomUnderSampler")
+            logging.info("Pipeline created with column dropping, MinMaxScaler, SMOTE, and RandomUnderSampler")
 
             test_preprocessor = ColumnTransformer(
                 [
-                    ('drop_cols', 'drop', ['NoDocbcCost', 'Stroke', 'AnyHealthcare']) # Explicitly drop these features
+                    ('drop_cols', 'drop', ['NoDocbcCost', 'Stroke', 'AnyHealthcare', 'Sex', 'DiffWalk', 'Smoker', 'Veggies', 'Fruits', 'PhysActivity']) # Explicitly drop these features
                 ],
                 remainder='passthrough'
             )
             logging.info("Test Drop cols preprocessor defined")
 
-            return preprocessor, test_preprocessor
+            # After fitting the full pipeline, extract just the steps needed for inference
+            inference_preprocessor = Pipeline(
+                steps=[
+                    ('drop_cols', drop_cols),
+                    ('scaler', preprocessor.named_steps['scaler'])  # reuse already-fitted scaler
+                ]
+            )
+
+            return preprocessor, test_preprocessor, inference_preprocessor
         
         except Exception as e:
             raise CustomException(e,sys)
@@ -66,7 +76,7 @@ class DataTransformation:
 
             logging.info("Obtaining preprocessing and testpreprocessing object")
 
-            preprocessing_obj, test_preprocessing_obj = self.get_data_transformer_object()
+            preprocessing_obj, test_preprocessing_obj, inference_preprocessor = self.get_data_transformer_object()
 
             target_column_name="Diabetes"
 
@@ -76,12 +86,18 @@ class DataTransformation:
             target_feature_test_df=test_df[target_column_name]
 
             logging.info("Applying preprocessing object using fit_resample with BOTH features and target on Training")
-            logging.info("This applies column dropping, SMOTE, and undersamplingon training dataframe and testing dataframe.")
+            logging.info("This applies column dropping, MinMaxScaling, SMOTE, and undersamplingon training dataframe and testing dataframe.")
             input_feature_train_arr, target_feature_train_arr = preprocessing_obj.fit_resample(input_feature_train_df, target_feature_train_df)
 
-            logging.info("Applying test preprocessing object using fit_transform with ONLY features on Testing")
+            logging.info("Applying test preprocessing object using transform with ONLY features on Testing")
+            logging.info("Reusing the MinMaxScaler fitted on raw training data — no refit on test set, no data leakage.")
             test_preprocessing_obj.fit(input_feature_train_df)
             input_feature_test_arr=test_preprocessing_obj.transform(input_feature_test_df)
+
+            # Extract the scaler fit on raw (pre-resampling) training data and apply to test
+            # Scaler was fit before SMOTE/undersampling so min/max reflects real data distribution
+            trained_scaler = preprocessing_obj.named_steps['scaler']
+            input_feature_test_arr = trained_scaler.transform(input_feature_test_arr)
 
             train_arr = np.c_[
                 input_feature_train_arr, target_feature_train_arr
@@ -90,13 +106,10 @@ class DataTransformation:
                 input_feature_test_arr, np.array(target_feature_test_df)
             ]
 
-            logging.info(f"Saved preprocessing object.")
-
+            logging.info("Saving inference preprocessor (drop + scale only, no resampling)")
             save_object(
-
                 file_path=self.data_transformation_config.preprocessor_obj_file_path,
-                obj=preprocessing_obj
-
+                obj=inference_preprocessor  # Save this instead of the full pipeline
             )
 
             return (

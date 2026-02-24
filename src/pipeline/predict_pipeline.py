@@ -27,7 +27,9 @@ class PredictPipeline:
             print("Preprocessor loaded successfully")
             
             print("After Loading")
-            data_scaled= features
+
+            # Apply the same preprocessing transformation used during training
+            data_scaled = preprocessor.transform(features)
             preds=model.predict(data_scaled)
             probabilities = model.predict_proba(data_scaled)
             return preds, probabilities

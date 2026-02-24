@@ -69,7 +69,7 @@ class ModelTrainer:
                     'colsample_bytree': [0.6, 0.8, 1.0],
                     'gamma': [0, 0.1, 0.5, 1],
                     'min_child_weight': [1, 3, 5],
-                    'scale_pos_weight': [1, 2, 3]                   
+                    'scale_pos_weight': [1, 2, 3]                
                 },
                 "CatBoosting Classifier": {
                     'iterations': [50, 100, 200, 300],
@@ -110,27 +110,27 @@ class ModelTrainer:
             best_model_obj = None
 
             for model_name, results in model_report.items():
-                roc_auc = results['test_roc_auc']
-                print(f"{model_name}: ROC-AUC: {roc_auc:.4f}")
+                f1 = results['test_f1']
+                print(f"{model_name}: F1: {f1:.4f}")
     
-                if roc_auc > best_model_score:
-                    best_model_score = roc_auc
+                if f1 > best_model_score:
+                    best_model_score = f1
                     best_model_name = model_name
                     best_model_params = results['best_params']
                     best_model_obj = results['best_model']
 
             # Check if best model meets threshold
-            if best_model_score<0.6:
+            if best_model_score<0.4:
                 raise CustomException("No best model found")
             
             print("BEST OVERALL MODEL")
             print(f"Model: {best_model_name}")
-            print(f"ROC-AUC Score: {best_model_score:.4f}")
+            print(f"F1 Score: {best_model_score:.4f}")
             print(f"Best Hyperparameters:")
             for param_name, param_value in best_model_params.items():
                 print(f"- {param_name}: {param_value}")
 
-            logging.info(f"Best model found: {best_model_name} with ROC-AUC: {best_model_score:.4f}")
+            logging.info(f"Best model found: {best_model_name} with F1: {best_model_score:.4f}")
 
             save_object(
                 file_path=self.model_trainer_config.trained_model_file_path,
@@ -142,7 +142,7 @@ class ModelTrainer:
             # Return best model details
             return {
                 'best_model_name': best_model_name,
-                'best_roc_auc': best_model_score,
+                'best_f1': best_model_score,
                 'best_params': best_model_params
             }
             

@@ -2,6 +2,7 @@ import os
 import sys
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+
 if project_root not in sys.path:
     sys.path.append(project_root)
 
@@ -67,5 +68,5 @@ if __name__=="__main__":
     train_arr,test_arr,_= data_transformation.initiate_data_transformation(train_data,test_data)
 
     modeltrainer=ModelTrainer()
-    best_model_name, best_roc_auc, best_params = modeltrainer.initiate_model_trainer(train_arr,test_arr)
-    print(best_roc_auc)
+    best_model_name, best_f1, best_params = modeltrainer.initiate_model_trainer(train_arr,test_arr)
+    print(best_f1)
