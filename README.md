@@ -53,7 +53,7 @@ I then create a predict_pipeline, application and home.html file to create a sim
 
 #### 9) Deployment on AWS
 
-I then use AWS Elastic Beanstalk and CodePipeline to deploy the web application to AWS. The user can successfully predict Diabetes Classification using the best model. Deployment Link: http://diabetesindicatorsclassifier-env.eba-cp4ukfpd.us-east-1.elasticbeanstalk.com/predictdata
+I then use AWS Elastic Beanstalk and CodePipeline to deploy the web application to AWS. The user can successfully predict Diabetes Classification using the best model. Deployment Link: http://newdiabetesindicatorsclassifier-env.eba-qw7mspet.us-east-1.elasticbeanstalk.com/predictdata
 
 #### Conclusion:
 
