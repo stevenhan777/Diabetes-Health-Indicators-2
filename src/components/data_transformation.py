@@ -31,21 +31,28 @@ class DataTransformation:
                     ('drop_cols', 'drop', ['NoDocbcCost', 'Stroke', 'AnyHealthcare', 'Sex', 'DiffWalk', 'Smoker', 'Veggies', 'Fruits', 'PhysActivity']) # Explicitly drop these features
                 ],
                 remainder='passthrough'
-            )
+            ).set_output(transform="pandas")
             logging.info("Drop cols preprocessor defined")
 
-            preprocessor = Pipeline(
-                steps = [
+            # Resampling pipeline — last step IS a resampler, so fit_resample works
+            resampling_pipeline = Pipeline(
+                steps=[
                     ('drop_cols', drop_cols),
                     ('smote', SMOTENC(
-                          categorical_features=['HighBP','HighChol','CholCheck','HeartDiseaseorAttack','HvyAlcoholConsump'], 
-                          sampling_strategy={1: 100000}, 
-                          random_state=42)),
-                    ('randomundersampler', RandomUnderSampler(sampling_strategy={0: 100000}, 
-                                                              random_state=42)),
-                    ('scaler', MinMaxScaler()) # scale after sampling
+                        categorical_features=['remainder__HighBP','remainder__HighChol','remainder__CholCheck',
+                                            'remainder__HeartDiseaseorAttack','remainder__HvyAlcoholConsump'],
+                        sampling_strategy={1: 100000},
+                        random_state=42)),
+                    ('randomundersampler', RandomUnderSampler(
+                        sampling_strategy={0: 100000},
+                        random_state=42))
                 ]
             )
+
+            # Separate scaler applied after resampling
+            scaler = MinMaxScaler()
+
+
             logging.info("Pipeline created with column dropping, MinMaxScaler, SMOTE, and RandomUnderSampler")
 
             test_preprocessor = ColumnTransformer(
@@ -53,18 +60,18 @@ class DataTransformation:
                     ('drop_cols', 'drop', ['NoDocbcCost', 'Stroke', 'AnyHealthcare', 'Sex', 'DiffWalk', 'Smoker', 'Veggies', 'Fruits', 'PhysActivity']) # Explicitly drop these features
                 ],
                 remainder='passthrough'
-            )
+            ).set_output(transform="pandas")
             logging.info("Test Drop cols preprocessor defined")
 
             # After fitting the full pipeline, extract just the steps needed for inference
             inference_preprocessor = Pipeline(
                 steps=[
                     ('drop_cols', drop_cols),
-                    ('scaler', preprocessor.named_steps['scaler'])  # reuse already-fitted scaler
+                    ('scaler', scaler)  # reuse already-fitted scaler
                 ]
             )
 
-            return preprocessor, test_preprocessor, inference_preprocessor
+            return drop_cols, resampling_pipeline, scaler, test_preprocessor, inference_preprocessor
         
         except Exception as e:
             raise CustomException(e,sys)
@@ -79,7 +86,7 @@ class DataTransformation:
 
             logging.info("Obtaining preprocessing and testpreprocessing object")
 
-            preprocessing_obj, test_preprocessing_obj, inference_preprocessor = self.get_data_transformer_object()
+            drop_cols, resampling_pipeline, scaler_obj,  test_preprocessing_obj, inference_preprocessor = self.get_data_transformer_object()
 
             target_column_name="Diabetes"
 
@@ -88,26 +95,25 @@ class DataTransformation:
             input_feature_test_df=test_df.drop(columns=[target_column_name],axis=1)
             target_feature_test_df=test_df[target_column_name]
 
+            # output to get the column names
+            new_df = drop_cols.fit_transform(input_feature_train_df)
+            print("new df cols: ", new_df.columns)
+
             logging.info("Applying preprocessing object using fit_resample with BOTH features and target on Training")
-            logging.info("This applies column dropping, MinMaxScaling, SMOTE, and undersamplingon training dataframe and testing dataframe.")
-            input_feature_train_arr, target_feature_train_arr = preprocessing_obj.fit_resample(input_feature_train_df, target_feature_train_df)
+            logging.info("This applies column dropping, SMOTE, and undersamplingon training dataframe and testing dataframe.")
+            X_train_resampled, y_train_resampled  = resampling_pipeline.fit_resample(input_feature_train_df, target_feature_train_df)
 
-            logging.info("Applying test preprocessing object using transform with ONLY features on Testing")
-            logging.info("Reusing the MinMaxScaler fitted on raw training data — no refit on test set, no data leakage.")
-            test_preprocessing_obj.fit(input_feature_train_df)
-            input_feature_test_arr=test_preprocessing_obj.transform(input_feature_test_df)
+            # Step 2: scale after resampling — fit only on resampled training data
+            logging.info("Scaling after resampling")
+            input_feature_train_arr = scaler_obj.fit_transform(X_train_resampled)
 
-            # Extract the scaler fit on raw (pre-resampling) training data and apply to test
-            # Scaler was fit before SMOTE/undersampling so min/max reflects real data distribution
-            trained_scaler = preprocessing_obj.named_steps['scaler']
-            input_feature_test_arr = trained_scaler.transform(input_feature_test_arr)
+            # Step 3: apply same drop + fitted scaler to test set (no refit)
+            logging.info("Applying drop + scale to test set (no refit)")
+            X_test_dropped = test_preprocessing_obj.fit(input_feature_train_df).transform(input_feature_test_df)
+            input_feature_test_arr = scaler_obj.transform(X_test_dropped)
 
-            train_arr = np.c_[
-                input_feature_train_arr, target_feature_train_arr
-            ]
-            test_arr = np.c_[
-                input_feature_test_arr, np.array(target_feature_test_df)
-            ]
+            train_arr = np.c_[input_feature_train_arr, y_train_resampled]
+            test_arr  = np.c_[input_feature_test_arr,  np.array(target_feature_test_df)]
 
             logging.info("Saving inference preprocessor (drop + scale only, no resampling)")
             save_object(
