@@ -8,7 +8,7 @@ from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import MinMaxScaler
 from imblearn.pipeline import Pipeline  # Use imblearn's Pipeline
 from sklearn.model_selection import train_test_split
-from imblearn.over_sampling import SMOTE
+from imblearn.over_sampling import SMOTENC
 from imblearn.under_sampling import RandomUnderSampler
 
 from src.exception import CustomException
@@ -25,8 +25,7 @@ class DataTransformation:
         self.data_transformation_config=DataTransformationConfig()
 
     def get_data_transformer_object(self):
-        try:         
-            
+        try:                     
             drop_cols = ColumnTransformer(
                 [
                     ('drop_cols', 'drop', ['NoDocbcCost', 'Stroke', 'AnyHealthcare', 'Sex', 'DiffWalk', 'Smoker', 'Veggies', 'Fruits', 'PhysActivity']) # Explicitly drop these features
@@ -38,9 +37,13 @@ class DataTransformation:
             preprocessor = Pipeline(
                 steps = [
                     ('drop_cols', drop_cols),
-                    ('scaler', MinMaxScaler()),  # Scale on raw training data before resampling
-                    ('smote', SMOTE(sampling_strategy={1: 100000}, random_state=42)),
-                    ('randomundersampler', RandomUnderSampler(sampling_strategy={0: 100000}, random_state=42))
+                    ('smote', SMOTENC(
+                          categorical_features=['HighBP','HighChol','CholCheck','HeartDiseaseorAttack','HvyAlcoholConsump'], 
+                          sampling_strategy={1: 100000}, 
+                          random_state=42)),
+                    ('randomundersampler', RandomUnderSampler(sampling_strategy={0: 100000}, 
+                                                              random_state=42)),
+                    ('scaler', MinMaxScaler()) # scale after sampling
                 ]
             )
             logging.info("Pipeline created with column dropping, MinMaxScaler, SMOTE, and RandomUnderSampler")
